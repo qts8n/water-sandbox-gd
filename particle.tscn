@@ -1,0 +1,22 @@
+[gd_scene load_steps=5 format=3 uid="uid://fyqwr2n541se"]
+
+[ext_resource type="Script" path="res://particle.gd" id="1_8e2vt"]
+[ext_resource type="Shader" path="res://shaders/particle.gdshader" id="2_xrq65"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ty7db"]
+render_priority = 0
+shader = ExtResource("2_xrq65")
+shader_parameter/color = Vector3(0.13, 0.6, 0.95)
+
+[sub_resource type="SphereMesh" id="SphereMesh_hg4cp"]
+material = SubResource("ShaderMaterial_ty7db")
+radius = 0.35
+height = 0.7
+radial_segments = 16
+rings = 8
+
+[node name="particle" type="Node3D"]
+script = ExtResource("1_8e2vt")
+
+[node name="particle_mesh" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_hg4cp")

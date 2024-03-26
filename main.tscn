@@ -1,0 +1,37 @@
+[gd_scene load_steps=6 format=3 uid="uid://coc80q56jn8e6"]
+
+[ext_resource type="Script" path="res://main.gd" id="1_8mjmg"]
+[ext_resource type="Script" path="res://camera.gd" id="1_ebn2s"]
+[ext_resource type="Script" path="res://fps_counter.gd" id="3_nenne"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_okd5e"]
+transparency = 1
+depth_draw_mode = 2
+no_depth_test = true
+shading_mode = 0
+disable_fog = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_lm047"]
+material = SubResource("StandardMaterial3D_okd5e")
+size = Vector3(32, 18, 18)
+
+[node name="main" type="Node3D"]
+script = ExtResource("1_8mjmg")
+
+[node name="box" type="MeshInstance3D" parent="."]
+transparency = 0.95
+ignore_occlusion_culling = true
+mesh = SubResource("BoxMesh_lm047")
+
+[node name="camera_anchor" type="Node3D" parent="."]
+
+[node name="camera" type="Camera3D" parent="camera_anchor"]
+script = ExtResource("1_ebn2s")
+DEFAULT_DISTANCE = 32.0
+ROTATE_SPEED = 0.5
+ANCHOR_NODE_PATH = NodePath("..")
+
+[node name="fps_counter" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+script = ExtResource("3_nenne")
