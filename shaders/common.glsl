@@ -54,22 +54,3 @@ uint hash_cell(ivec3 cell_index, uint num_particles) {
     uvec3 cell = uvec3(cell_index);
     return (cell.x * P1 + cell.y * P2 + cell.z * P3) % num_particles;
 }
-
-// Structs
-
-struct FluidProps {
-    float delta_time;
-    float collision_damping;
-    float mass;
-    float radius;
-    float smoothing_radius;
-    float target_density;
-    float pressure_scalar;
-    float near_pressure_scalar;
-    float viscosity_strength;
-};
-
-struct BitSorter {
-    uint block_size;
-    uint dim;
-};

@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://coc80q56jn8e6"]
+[gd_scene load_steps=7 format=3 uid="uid://coc80q56jn8e6"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_8mjmg"]
 [ext_resource type="Script" path="res://camera.gd" id="1_ebn2s"]
+[ext_resource type="Script" path="res://fluid_container.gd" id="2_qd83n"]
 [ext_resource type="Script" path="res://fps_counter.gd" id="3_nenne"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_okd5e"]
@@ -22,6 +23,7 @@ script = ExtResource("1_8mjmg")
 transparency = 0.95
 ignore_occlusion_culling = true
 mesh = SubResource("BoxMesh_lm047")
+script = ExtResource("2_qd83n")
 
 [node name="camera_anchor" type="Node3D" parent="."]
 
