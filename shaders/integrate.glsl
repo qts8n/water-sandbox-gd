@@ -7,13 +7,13 @@ layout(local_size_x = WORKGROUP_SIZE, local_size_y = 1, local_size_z = 1) in;
 
 #include "buffers.glsl"
 
-layout(set = 0, binding = 1, packed) restrict buffer Positions { vec3 data[]; } positions;
-layout(set = 0, binding = 2, packed) restrict buffer Velocities { vec3 data[]; } velocities;
-layout(set = 0, binding = 3, packed) restrict buffer Accelerations { vec3 data[]; } accelerations;
-layout(set = 0, binding = 4, packed) restrict buffer PredictedPositions { vec3 data[]; } predicted_positions;
-layout(set = 0, binding = 5, packed) restrict buffer FluidContainer {
-    vec3 ext_min;
-    vec3 ext_max;
+layout(set = 0, binding = 1, std430) restrict buffer Positions { vec4 data[]; } positions;
+layout(set = 0, binding = 2, std430) restrict buffer Velocities { vec4 data[]; } velocities;
+layout(set = 0, binding = 3, std430) restrict buffer Accelerations { vec4 data[]; } accelerations;
+layout(set = 0, binding = 4, std430) restrict buffer PredictedPositions { vec4 data[]; } predicted_positions;
+layout(set = 0, binding = 5, std430) restrict buffer FluidContainer {
+    vec4 ext_min;
+    vec4 ext_max;
 } fluid_container;
 
 
@@ -24,7 +24,7 @@ void main () {
         return;
     }
 
-    vec3 gravity = vec3(0., -fluid_props.gravity, 0.);
+    vec4 gravity = vec4(0., -fluid_props.gravity, 0., 0.);
 
     // Integrate
     velocities.data[index] += (gravity + accelerations.data[index]) / fluid_props.mass * fluid_props.delta_time;

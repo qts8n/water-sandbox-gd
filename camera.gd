@@ -43,13 +43,13 @@ func _process_transformation(delta: float):
 	if _rotation.x > PI/2:
 		_rotation.x = PI/2
 	_move_speed = Vector2()
-	
+
 	# Update distance
 	_distance += _scroll_speed * delta
 	if _distance < 0:
 		_distance = 0
 	_scroll_speed = 0
-	
+
 	set_identity()
 	translate_object_local(Vector3(0,0,_distance))
 	_anchor_node.set_identity()
@@ -95,6 +95,6 @@ func _process_touch_zoom_event(e: InputEventScreenTouch):
 		if not _touches.has(e.index):
 			_touches[e.index] = e.position
 	else:
-		if _touches.has(e.index):	
+		if _touches.has(e.index):
 			# warning-ignore:return_value_discarded
 			_touches.erase(e.index)

@@ -41,10 +41,10 @@ func run(groups: Vector3i) -> void:
 	bindings.clear()
 	for uniform_index in uniforms.size():
 		bindings.append(uniforms[uniform_index].get_rd_uniform(uniform_index))
-	
+
 	var uniform_set = rd.uniform_set_create(bindings, compute_shader, 0)
 	var compute_list = rd.compute_list_begin()
-	
+
 	rd.compute_list_bind_compute_pipeline(compute_list, pipeline)
 	rd.compute_list_bind_uniform_set(compute_list, uniform_set, 0)
 	rd.compute_list_dispatch(compute_list, groups.x, groups.y, groups.z)

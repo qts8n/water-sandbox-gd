@@ -15,7 +15,7 @@ const INTEGRATE_SHADER_PATH = "res://shaders/integrate.glsl"
 @export var TARGET_DENSITY: float = 10.
 @export var PRESSURE_SCALAR: float = 55.
 @export var NAER_PRESSURE_SCALAR: float = 2.
-@export var VISCOSITY_STRENGTH: float = 0.5 
+@export var VISCOSITY_STRENGTH: float = 0.5
 
 # Particles
 var _particle_scene = preload("res://particle.tscn")
@@ -34,8 +34,9 @@ var _fluid_container_buffer: StorageBufferUniform
 # Compute passes
 var _integrate_pass: ComputePass
 
-func _generate_cube_fluid(ni: int, nj: int, nk: int, radius: float):
-	var points = []
+
+func _generate_cube_fluid(ni: int, nj: int, nk: int, radius: float) -> Array[Vector3]:
+	var points: Array[Vector3] = []
 	var half_extents = Vector3(ni, nj, nk) * radius
 	var offset = Vector3.ONE * radius - half_extents
 	var diam = radius * 2
@@ -76,21 +77,26 @@ func _get_workgroup() -> Vector3i:
 func _ready():
 	# Init particle positions
 	_particle_radius = _particle_scene.instantiate().get_radius()
-	var ext = $box.get_ext(_particle_radius)
+	var ext = $box.get_ext_buffer(_particle_radius)
 	var positions = _generate_cube_fluid(N_SIZE, N_SIZE, N_SIZE, _particle_radius)
-	_num_particles = len(positions)
+	var positions_buffer: Array[float] = []
 	for point in positions:
+		# Init next particle object
 		var particle_instance = _particle_scene.instantiate()
 		particle_instance.position = point
-		_particles.push_back(particle_instance)
 		add_child(particle_instance)
+		# Store
+		_particles.push_back(particle_instance)
+		positions_buffer.append_array([point.x, point.y, point.z, 0.])
+
 	# Init compute buffers
+	_num_particles = len(positions)
 	_fluid_props_buffer = StorageBufferUniform.create(_get_fluid_props().to_byte_array())
-	_positions_buffer = StorageBufferUniform.create(PackedVector3Array(positions).to_byte_array())
-	_velocities_buffer = StorageBufferUniform.create_vec3_zeros(_num_particles)
-	_accelerations_buffer = StorageBufferUniform.create_vec3_zeros(_num_particles)
-	_predicted_positions_buffer = StorageBufferUniform.create(PackedVector3Array(positions).to_byte_array())
-	_fluid_container_buffer = StorageBufferUniform.create(PackedVector3Array(ext).to_byte_array())
+	_positions_buffer = StorageBufferUniform.create(PackedFloat32Array(positions_buffer).to_byte_array())
+	_velocities_buffer = StorageBufferUniform.create_vec4_zeros(_num_particles)
+	_accelerations_buffer = StorageBufferUniform.create_vec4_zeros(_num_particles)
+	_predicted_positions_buffer = StorageBufferUniform.create(PackedFloat32Array(positions_buffer).to_byte_array())
+	_fluid_container_buffer = StorageBufferUniform.create(PackedFloat32Array(ext).to_byte_array())
 
 	# Init compute passes
 	_integrate_pass = ComputePass.from_shader_path(INTEGRATE_SHADER_PATH)
@@ -104,15 +110,13 @@ func _ready():
 	])
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(_delta):
 	_fluid_props_buffer.update_data(_get_fluid_props().to_byte_array())
 	_integrate_pass.run(_get_workgroup())
 	ComputePass.sync()
-
 	var coordinate_components = _positions_buffer.get_data().to_float32_array()
-	for c in range(0, len(coordinate_components), 3):
-		var particle_index = c / 3
+	for c in range(0, len(coordinate_components), 4):
+		var particle_index = c / 4
 		_particles[particle_index].position = Vector3(
 			coordinate_components[c],
 			coordinate_components[c + 1],
