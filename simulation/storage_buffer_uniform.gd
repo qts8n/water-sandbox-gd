@@ -17,6 +17,12 @@ static func create_uint_zeros(data_length: int) -> StorageBufferUniform:
 		data.push_back(0)
 	return StorageBufferUniform.create(PackedByteArray(data))
 
+static func create_vec2_zeros(data_length: int) -> StorageBufferUniform:
+	var data: Array[Vector2] = []
+	for _it in range(data_length):
+		data.push_back(Vector2.ZERO)
+	return StorageBufferUniform.create(PackedVector2Array(data).to_byte_array())
+
 static func create_vec4_zeros(data_length: int) -> StorageBufferUniform:
 	var data: Array[float] = []
 	for _it in range(data_length * 4):

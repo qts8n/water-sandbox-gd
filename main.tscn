@@ -14,10 +14,11 @@ disable_fog = true
 
 [sub_resource type="BoxMesh" id="BoxMesh_lm047"]
 material = SubResource("StandardMaterial3D_okd5e")
-size = Vector3(32, 18, 18)
+size = Vector3(16, 9, 9)
 
 [node name="main" type="Node3D"]
 script = ExtResource("1_8mjmg")
+SMOOTHING_RADIUS = 0.45
 
 [node name="box" type="MeshInstance3D" parent="."]
 transparency = 0.95

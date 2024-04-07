@@ -54,3 +54,33 @@ uint hash_cell(ivec3 cell_index, uint num_particles) {
     uvec3 cell = uvec3(cell_index);
     return (cell.x * P1 + cell.y * P2 + cell.z * P3) % num_particles;
 }
+
+void fill_offset_table(inout ivec3 offset_table[27]) {
+    offset_table[0] = ivec3(-1, -1, -1);
+    offset_table[1] = ivec3(-1, -1, 0);
+    offset_table[2] = ivec3(-1, -1, 1);
+    offset_table[3] = ivec3(-1, 0, -1);
+    offset_table[4] = ivec3(-1, 0, 0);
+    offset_table[5] = ivec3(-1, 0, 1);
+    offset_table[6] = ivec3(-1, 1, -1);
+    offset_table[7] = ivec3(-1, 1, 0);
+    offset_table[8] = ivec3(-1, 1, 1);
+    offset_table[9] = ivec3(0, -1, -1);
+    offset_table[10] = ivec3(0, -1, 0);
+    offset_table[11] = ivec3(0, -1, 1);
+    offset_table[12] = ivec3(0, 0, -1);
+    offset_table[13] = ivec3(0, 0, 0);
+    offset_table[14] = ivec3(0, 0, 1);
+    offset_table[15] = ivec3(0, 1, -1);
+    offset_table[16] = ivec3(0, 1, 0);
+    offset_table[17] = ivec3(0, 1, 1);
+    offset_table[18] = ivec3(1, -1, -1);
+    offset_table[19] = ivec3(1, -1, 0);
+    offset_table[20] = ivec3(1, -1, 1);
+    offset_table[21] = ivec3(1, 0, -1);
+    offset_table[22] = ivec3(1, 0, 0);
+    offset_table[23] = ivec3(1, 0, 1);
+    offset_table[24] = ivec3(1, 1, -1);
+    offset_table[25] = ivec3(1, 1, 0);
+    offset_table[26] = ivec3(1, 1, 1);
+}
